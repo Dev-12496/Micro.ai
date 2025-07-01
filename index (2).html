@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MicroAi - Your Personal AI Assistant</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f0f;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      background-color: #1f1f1f;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    header img {
+      width: 60px;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+
+    header h1 {
+      display: inline;
+      font-size: 28px;
+      color: #00ffcc;
+    }
+
+    #chatbox {
+      width: 90%;
+      max-width: 700px;
+      height: 400px;
+      margin-top: 30px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      padding: 15px;
+      overflow-y: scroll;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .message {
+      margin: 10px 0;
+    }
+
+    .user {
+      color: #00c3ff;
+    }
+
+    .bot {
+      color: #90ee90;
+    }
+
+    #inputContainer {
+      margin-top: 20px;
+      display: flex;
+      width: 90%;
+      max-width: 700px;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px 0 0 6px;
+    }
+
+    #sendButton {
+      background-color: #00ffcc;
+      color: black;
+      font-weight: bold;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 0 6px 6px 0;
+    }
+
+    #sendButton:hover {
+      background-color: #00cfa5;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://i.imgur.com/tFhdtB2.png" alt="MicroAi Logo">
+    <h1>MicroAi - Your Personal AI Assistant</h1>
+  </header>
+
+  <div id="chatbox"></div>
+
+  <div id="inputContainer">
+    <input type="text" id="userInput" placeholder="Type your message here...">
+    <button id="sendButton" onclick="sendMessage()">Send</button>
+  </div>
+
+  <footer>
+    &copy; 2025 MicroAi | Created by Dev
+  </footer>
+
+  <script>
+    const chatbox = document.getElementById('chatbox');
+
+    function addMessage(role, text) {
+      const msg = document.createElement('div');
+      msg.className = 'message ' + (role === "You" ? "user" : "bot");
+      msg.innerHTML = `<strong>${role}:</strong> ${text}`;
+      chatbox.appendChild(msg);
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      addMessage("You", userText);
+      input.value = "";
+
+      const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_API_KEY_HERE"
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: userText }]
+        })
+      });
+
+      const data = await res.json();
+      const reply = data.choices?.[0]?.message?.content || "MicroAi: Error from AI";
+      addMessage("MicroAi", reply);
+    }
+  </script>
+</body>
+</html>
