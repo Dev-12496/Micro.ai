@@ -1,1 +1,9 @@
-# Micro.aisk-proj-OLMzVt3eAWKUF0ce0UEKkhCNlLRYYCedwyu_ojD40KQ71waQqYwKaHjAVJFYjLn-4d33E4VJFHT3BlbkFJNv3y3Xg_KdvJe_IKJeMfqF5Kivsprtn2tftlvEf3MIUerZKTaGfgC5HMavxzsITu4AKtfjFvEA
+API_key_HERE
+method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer YOUR_API_KEY_HERE"
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+Show 1 more match
